@@ -1,12 +1,15 @@
-import logo from "./logo.svg";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Connection from "./components/connection/connection";
-
+import Home from "./components/connection/home";
 function App() {
   return (
-    <div>
-      <Connection></Connection>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Connection />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 
