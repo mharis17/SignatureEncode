@@ -32,7 +32,7 @@ function Connection({ setIsAuthenticated }) {
       };
 
       signerAddress = metamaskAccount[0];
-      console.log(signerAddress);
+      // console.log(signerAddress, "MAINsigner");
       let token = wallet.connected;
       console.log(token);
 
@@ -138,8 +138,12 @@ function Connection({ setIsAuthenticated }) {
   async function ExtractPubKey() {
     const web3 = window.web3;
     const address = await web3.eth.getAccounts();
-    const senderPubKey = await contract.methods.viewPublicKEY(address).call();
-    console.log(senderPubKey, "sending public key");
+    const senderPubKey = await contract.methods
+      .viewPublickEY(address.toString())
+      .call()
+      .catch((err) => console.error);
+
+    console.log(senderPubKey, "public key");
   }
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
