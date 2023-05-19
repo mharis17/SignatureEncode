@@ -3,6 +3,7 @@ import "./App.css";
 import Connection from "./components/connection/connection";
 import Reciever from "./components/connection/reciever";
 import Home from "./components/connection/home";
+import SigSecret from "./components/publicKey";
 function App() {
   return (
     <Router>
@@ -12,6 +13,7 @@ function App() {
         <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
+    // <SigSecret />
   );
 }
 

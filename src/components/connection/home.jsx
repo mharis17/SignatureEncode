@@ -7,6 +7,7 @@ function Home() {
     state.Token = false;
     window.location.href = "/";
   }
+
   return state && state.Token ? (
     <div>
       <div className="flex justify-end m-4">
