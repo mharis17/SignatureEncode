@@ -5,7 +5,6 @@ import Reciever from "./components/connection/reciever";
 import Home from "./components/connection/home";
 import Dhky from "./components/connection/DHKY";
 import AES from "./components/connection/AES";
-import SigSecret from "./components/publicKey";
 function App() {
   return (
     <Router>
@@ -17,7 +16,6 @@ function App() {
         <Route path="/aes" element={<AES />} />
       </Routes>
     </Router>
-    // <SigSecret />
   );
 }
 
