@@ -1,54 +1,66 @@
 import React, { useEffect, useState } from "react";
 import Web3 from "web3";
 import { useNavigate } from "react-router-dom";
-import ContractAbi from "../../abi/contract.abi.json";
+import CONTRACT_ABI from "../../abi/contract.abi.json";
 import { Buffer } from "buffer";
 import { bufferToHex } from "ethereumjs-util";
 import { encrypt } from "@metamask/eth-sig-util";
 
-function Connection({ setIsAuthenticated }) {
+function Connection() {
   const navigate = useNavigate();
-  let condition = false;
-  let signerAddress;
-  let publicKey;
-  const CONTRACT_ADDRESS = "0x7AEAB6A19125E2C00950102F09479b08E4b71bb9";
-  const [Contract, setContract] = useState();
+  const CONTRACT_ADDRESS = "0x0165f66Ba218fBE1dF3B32242805c43E785A36Ca";
+  const [connected, setConnected] = useState(false);
+  const [registered, setRegistered] = useState(false);
+
   async function connect() {
     if (window.ethereum) {
+      let m;
+      await window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then((a) => (m = a[0]));
+
+      window.web3 = new Web3(window.ethereum);
+      const ct = new window.web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+
+      let registered = await ct.methods.publickeys(m).call();
+
+      if (registered) setRegistered(true);
+      setConnected(true);
+
       // PK
-      window.ethereum
-        .request({
-          method: "eth_getEncryptionPublicKey",
-          params: [signerAddress], // you must have access to the specified account
-        })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((error) => {
-          if (error.code === 4001) {
-            // EIP-1193 userRejectedRequest error
-            console.log("We can't encrypt anything without the key.");
-          } else {
-            console.error(error);
-          }
-        });
+      // window.ethereum
+      //   .request({
+      //     method: "eth_getEncryptionPublicKey",
+      //     params: ["0x79bF221763d63B96f232dC14f64c9de63bB1f895"], // you must have access to the specified account
+      //   })
+      //   .then((result) => {
+      //     console.log(result);
+      //   })
+      //   .catch((error) => {
+      //     if (error.code === 4001) {
+      //       // EIP-1193 userRejectedRequest error
+      //       console.log("We can't encrypt anything without the key.");
+      //     } else {
+      //       console.error(error);
+      //     }
+      //   });
       // return;
       // PK
 
       // encrypt
-      const encryptedMessage = bufferToHex(
-        Buffer.from(
-          JSON.stringify(
-            encrypt({
-              publicKey: "j81xUDrfgup64chyXn3v2BP0t7itPYQlHBYXnzqeuwU=",
-              data: "hello world!",
-              version: "x25519-xsalsa20-poly1305",
-            })
-          ),
-          "utf8"
-        )
-      );
-      console.log(encryptedMessage);
+      // const encryptedMessage = bufferToHex(
+      //   Buffer.from(
+      //     JSON.stringify(
+      //       encrypt({
+      //         publicKey: "j81xUDrfgup64chyXn3v2BP0t7itPYQlHBYXnzqeuwU=",
+      //         data: "hello world!",
+      //         version: "x25519-xsalsa20-poly1305",
+      //       })
+      //     ),
+      //     "utf8"
+      //   )
+      // );
+      // console.log(encryptedMessage);
       // return;
       // encrypt
 
@@ -68,103 +80,137 @@ function Connection({ setIsAuthenticated }) {
 
       // decrypt
 
-      window.web3 = new Web3(window.ethereum);
-      await window.ethereum.enable();
-      const web3 = window.web3;
-      const metamaskAccount = await web3.eth.getAccounts();
-      let chain = await window.ethereum.request({ method: "eth_chainId" });
-
-      let wallet = {
-        connectedAccount: metamaskAccount[0],
-        connected: true,
-        splittedAccount: splitAccount(metamaskAccount[0]),
-        chainId: chain,
-      };
-
-      signerAddress = metamaskAccount[0];
-      let token = wallet.connected;
-      const keyB64 = await window.ethereum.request({
-        method: "eth_getEncryptionPublicKey",
-        params: [signerAddress],
-      });
-
-      console.log(keyB64);
-      publicKey = Buffer.from(keyB64, "base64");
-
-      console.log(publicKey);
-
-      if (token) {
-        sendPublicKey();
-        navigate("/home", { state: { Token: token } });
-      }
-    } else {
-      window.alert(
-        "Non-Ether Browser detected. You should consider trying Metamask"
-      );
-    }
-  }
-  useEffect(() => {
-    loadWeb3();
-  }, []);
-  async function loadWeb3() {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
+      // window.web3 = new Web3(window.ethereum);
       // await window.ethereum.enable();
-      const web3 = window.web3;
-      // creating contract instance
-      const contractaddress = CONTRACT_ADDRESS;
-      const ct = new web3.eth.Contract(ContractAbi, contractaddress);
-      setContract(ct);
-    } else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider);
-    } else {
-      window.alert(
-        "Non-Ethereum browser detected. You should consider trying MetaMask!"
-      );
+      // const web3 = window.web3;
+      // const metamaskAccount = await web3.eth.getAccounts();
+      // let chain = await window.ethereum.request({ method: "eth_chainId" });
+
+      // let wallet = {
+      //   connectedAccount: metamaskAccount[0],
+      //   connected: true,
+      //   splittedAccount: splitAccount(metamaskAccount[0]),
+      //   chainId: chain,
+      // };
+
+      //   signerAddress = metamaskAccount[0];
+      //   let token = wallet.connected;
+      //   const keyB64 = await window.ethereum.request({
+      //     method: "eth_getEncryptionPublicKey",
+      //     params: [signerAddress],
+      //   });
+
+      //   console.log(keyB64);
+      //   publicKey = Buffer.from(keyB64, "base64");
+
+      //   console.log(publicKey);
+
+      //   if (token) {
+      //     sendPublicKey();
+      //     navigate("/home", { state: { Token: token } });
     }
+    // } else {
+    //   window.alert(
+    //     "Non-Ether Browser detected. You should consider trying Metamask"
+    //   );
+    // }
   }
 
-  async function sendPublicKey() {
-    const web3 = window.web3;
-    const address = await web3.eth.getAccounts();
-    await Contract.methods
-      .sendPublicKey(publicKey)
-      .send({ from: address.toString() })
-      .catch((err) => console.error);
+  async function registerEvents() {
+    window.ethereum.on("accountsChanged", (a) =>
+      localStorage.setItem("address", a[0])
+    );
   }
 
-  function splitAccount(value) {
-    return (
-      value.substring(0, 5) +
-      "......" +
-      value.substring(value.length - 4, value.length)
-    ).toString();
+  useEffect(() => {
+    registerEvents();
+  }, []);
+
+  async function registerKey() {
+    let m;
+    await window.ethereum
+      .request({ method: "eth_requestAccounts" })
+      .then((a) => (m = a[0]));
+
+    window.ethereum
+      .request({
+        method: "eth_getEncryptionPublicKey",
+        params: [m],
+      })
+      .then(async (result) => {
+        window.web3 = new Web3(window.ethereum);
+        const ct = new window.web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+
+        try {
+          await ct.methods.sendPublicKey(result).send({ from: m });
+        } catch (e) {
+          console.log(e);
+        }
+      })
+      .catch((error) => {
+        if (error.code === 4001) {
+          // EIP-1193 userRejectedRequest error
+          alert("You can't receive messages without the public key.");
+        } else {
+          console.error(error);
+        }
+      });
   }
+
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Click to connect
-        </h2>
-      </div>
+    <div className="md:p-10">
+      {!connected ? (
+        <>
+          <h2 className="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-gray-900 my-3">
+            Click to connect
+          </h2>
+          <button
+            onClick={connect}
+            className="flex mx-auto justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Connect Wallet
+          </button>
+        </>
+      ) : (
+        ""
+      )}
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <div className="space-y-6">
-          <div>
-            <button
-              onClick={connect}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Connect Wallet
-            </button>
-          </div>
-          {condition ? (
-            <p className="text-center">Connected!</p>
-          ) : (
-            <p className="text-center">Not Connected!</p>
-          )}
-        </div>
-      </div>
+      {!registered && connected ? (
+        <>
+          <p className="text-center my-5">
+            Register your public key to receive messages on your address.
+            <br />
+            add check for localStorage address with time expiry
+          </p>
+          <button
+            onClick={() => registerKey()}
+            className="flex my-2 mx-auto justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Register Public Key
+          </button>
+        </>
+      ) : (
+        ""
+      )}
+
+      {connected ? (
+        <>
+          <button
+            onClick={() => navigate("/send")}
+            className="flex my-2 mx-auto justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Send a Message
+          </button>
+          <button
+            onClick={() => navigate("/reciever")}
+            className="flex mx-auto justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            View Received Messages
+          </button>
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

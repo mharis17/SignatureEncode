@@ -5,19 +5,21 @@
       { "internalType": "uint256", "name": "", "type": "uint256" }
     ],
     "name": "messageDetails",
-    "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "publickeys",
-    "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "bytes", "name": "_pubkey", "type": "bytes" }],
+    "inputs": [
+      { "internalType": "string", "name": "_pubkey", "type": "string" }
+    ],
     "name": "sendPublicKey",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -25,7 +27,7 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes", "name": "_message", "type": "bytes" },
+      { "internalType": "string", "name": "_message", "type": "string" },
       { "internalType": "address", "name": "reciever", "type": "address" }
     ],
     "name": "storeData",
@@ -38,7 +40,7 @@
       { "internalType": "address", "name": "reciever", "type": "address" }
     ],
     "name": "viewMessage",
-    "outputs": [{ "internalType": "bytes[]", "name": "", "type": "bytes[]" }],
+    "outputs": [{ "internalType": "string[]", "name": "", "type": "string[]" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -48,7 +50,7 @@
       { "internalType": "address", "name": "reciever", "type": "address" }
     ],
     "name": "viewMessageByIndex",
-    "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -57,7 +59,7 @@
       { "internalType": "address", "name": "reciever", "type": "address" }
     ],
     "name": "viewPublickEY",
-    "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   }

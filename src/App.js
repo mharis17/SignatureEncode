@@ -2,20 +2,24 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Connection from "./components/connection/connection";
 import Reciever from "./components/connection/reciever";
-import Home from "./components/connection/home";
-import Dhky from "./components/connection/DHKY";
-import AES from "./components/connection/AES";
+import Send from "./components/connection/send";
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Connection />} />
-        <Route path="/reciever" element={<Reciever />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/dhky" element={<Dhky />} />
-        <Route path="/aes" element={<AES />} />
-      </Routes>
-    </Router>
+    <div className="md:p-[30px]">
+      <h3
+        className="text-[30px] font-bold text-center cursor-pointer"
+        onClick={() => (window.location.href = "/")}
+      >
+        BlockSend
+      </h3>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Connection />} />
+          <Route path="/send" element={<Send />} />
+          <Route path="/reciever" element={<Reciever />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
