@@ -3,6 +3,8 @@ import "./App.css";
 import Connection from "./components/connection/connection";
 import Reciever from "./components/connection/reciever";
 import Send from "./components/connection/send";
+import Dhky from "./components/connection/DHKY";
+import AES from "./components/connection/AES";
 function App() {
   return (
     <div className="md:p-[30px]">
@@ -17,6 +19,8 @@ function App() {
           <Route path="/" element={<Connection />} />
           <Route path="/send" element={<Send />} />
           <Route path="/reciever" element={<Reciever />} />
+          <Route path="/dhky" element={<Dhky />} />
+          <Route path="/aes" element={<AES />} />
         </Routes>
       </Router>
     </div>
