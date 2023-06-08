@@ -1,28 +1,13 @@
 import React, { useState, useEffect } from "react";
 function Dhky() {
-  const getPrimes = (min, max) => {
-    const result = Array(max + 1)
-      .fill(0)
-      .map((_, i) => i);
-    for (let i = 2; i <= Math.sqrt(max + 1); i++) {
-      for (let j = i ** 2; j < max + 1; j += i) delete result[j];
-    }
-    return Object.values(result.slice(min));
-  };
-  const getRandomNum = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-  const getRandomPrime = ([min, max]) => {
-    const primes = getPrimes(min, max);
-    return primes[getRandomNum(0, primes.length - 1)];
-  };
-  const [data, setData] = useState(0);
+  const [data, setData] = useState(null);
   const [items, setItem] = useState(null);
   const [toggle, setToggle] = useState(false);
   const [ab, setab] = useState(null);
   const [A_B, setA_B] = useState(null);
   const [key, setkey] = useState(null);
   const [Fkey, setFkey] = useState(null);
+  const [g, setg] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("Pnumber", JSON.stringify(data));
@@ -30,8 +15,6 @@ function Dhky() {
   }, [data]);
 
   function generateRamdomNumber() {
-    setData(getRandomPrime([100, 1000]));
-    // toggle = true;
     setToggle(true);
   }
 
@@ -113,7 +96,6 @@ function Dhky() {
   }
   const p = data;
   localStorage.setItem("gnumber", JSON.stringify(generatePrimitiveRoot(p)));
-  const g = localStorage.getItem("gnumber");
 
   function calculateKey() {
     setFkey(modPow(A_B, ab, data));
@@ -128,18 +110,34 @@ function Dhky() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="space-y-6">
+          <div className="mt-2">
+            <input
+              placeholder="Enter your Prime Number"
+              onChange={(e) => setData(e.target.value)}
+              required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+          <div className="mt-2">
+            <input
+              placeholder="Enter your Generator"
+              onChange={(e) => setg(e.target.value)}
+              required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
           <div>
             <button
               disabled={toggle}
               onClick={generateRamdomNumber}
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Generate Prime Number
+              Set Prime and Generator
             </button>
           </div>
           <div>
             <p className="text-center m-3">
-              Generated Prime Number: {items} <br />g : {g}
+              Prime Number: {items} <br />g : {g}
             </p>
           </div>
           <div>

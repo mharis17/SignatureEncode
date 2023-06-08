@@ -1,7 +1,7 @@
 import Web3 from "web3";
 import CONTRACT_ABI from "../../abi/contract.abi.json";
 import { useEffect, useState } from "react";
-const CONTRACT_ADDRESS = "0x0165f66Ba218fBE1dF3B32242805c43E785A36Ca";
+const CONTRACT_ADDRESS = "0x59028155D42d57D39A0d793885128606a4f62Cb1";
 
 function Reciever() {
   const [messages, setMessages] = useState([]);

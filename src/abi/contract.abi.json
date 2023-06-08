@@ -1,5 +1,34 @@
 [
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "a", "type": "address" },
+      { "internalType": "bool", "name": "approval", "type": "bool" }
+    ],
+    "name": "approve",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "address", "name": "", "type": "address" },
       { "internalType": "uint256", "name": "", "type": "uint256" }
@@ -10,17 +39,24 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "publickeys",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
       { "internalType": "string", "name": "_pubkey", "type": "string" }
     ],
-    "name": "sendPublicKey",
+    "name": "request",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -33,6 +69,26 @@
     "name": "storeData",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "users",
+    "outputs": [
+      { "internalType": "string", "name": "publicKey", "type": "string" },
+      { "internalType": "bool", "name": "approved", "type": "bool" },
+      { "internalType": "bool", "name": "registered", "type": "bool" }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -58,8 +114,17 @@
     "inputs": [
       { "internalType": "address", "name": "reciever", "type": "address" }
     ],
-    "name": "viewPublickEY",
+    "name": "viewPublicKe",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewUserAddresses",
+    "outputs": [
+      { "internalType": "address[]", "name": "", "type": "address[]" }
+    ],
     "stateMutability": "view",
     "type": "function"
   }

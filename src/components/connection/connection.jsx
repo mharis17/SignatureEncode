@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import Web3 from "web3";
 import { useNavigate } from "react-router-dom";
 import CONTRACT_ABI from "../../abi/contract.abi.json";
-import { Buffer } from "buffer";
-import { bufferToHex } from "ethereumjs-util";
-import { encrypt } from "@metamask/eth-sig-util";
 
 function Connection() {
   const navigate = useNavigate();
-  const CONTRACT_ADDRESS = "0x0165f66Ba218fBE1dF3B32242805c43E785A36Ca";
+  const CONTRACT_ADDRESS = "0x59028155D42d57D39A0d793885128606a4f62Cb1";
   const [connected, setConnected] = useState(false);
   const [registered, setRegistered] = useState(false);
 
@@ -21,10 +18,8 @@ function Connection() {
 
       window.web3 = new Web3(window.ethereum);
       const ct = new window.web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-
-      let registered = await ct.methods.publickeys(m).call();
-
-      if (registered) setRegistered(true);
+      let registered = await ct.methods.users(m).call();
+      if (registered) setRegistered(registered.registered);
       setConnected(true);
 
       // PK
@@ -140,9 +135,8 @@ function Connection() {
       .then(async (result) => {
         window.web3 = new Web3(window.ethereum);
         const ct = new window.web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-
         try {
-          await ct.methods.sendPublicKey(result).send({ from: m });
+          await ct.methods.request(result).send({ from: m });
         } catch (e) {
           console.log(e);
         }

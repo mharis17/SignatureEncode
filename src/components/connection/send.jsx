@@ -3,7 +3,7 @@ import { encrypt } from "@metamask/eth-sig-util";
 
 import Web3 from "web3";
 import CONTRACT_ABI from "../../abi/contract.abi.json";
-const CONTRACT_ADDRESS = "0x0165f66Ba218fBE1dF3B32242805c43E785A36Ca";
+const CONTRACT_ADDRESS = "0x59028155D42d57D39A0d793885128606a4f62Cb1";
 
 function Send() {
   async function encryptAndSend() {
@@ -23,7 +23,7 @@ function Send() {
 
     const ct = new window.web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
 
-    let PUBLIC_KEY = await ct.methods.publickeys(receiverAddress).call();
+    let PUBLIC_KEY = await ct.methods.viewPublicKe(receiverAddress).call();
     if (!PUBLIC_KEY) {
       alert("Given Reciever's address is not registered");
       return;
