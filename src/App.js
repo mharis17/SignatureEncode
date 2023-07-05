@@ -7,6 +7,7 @@ import Dhky from "./components/connection/DHKY";
 import AES from "./components/connection/AES";
 import Sidebar from "./components/connection/Sidebar";
 import ViewAddresses from "./components/connection/ViewAddresses";
+import SendTransaction from "./components/connection/SendTransaction";
 function App() {
   return (
     <div className="flex-wrap	">
@@ -27,6 +28,7 @@ function App() {
               <Route path="/dhky" element={<Dhky />} />
               <Route path="/aes" element={<AES />} />
               <Route path="/viewAllAddress" element={<ViewAddresses />} />
+              <Route path="/SendTransaction" element={<SendTransaction />} />
             </Routes>
           </Router>
         </div>
