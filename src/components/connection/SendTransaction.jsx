@@ -35,7 +35,6 @@ function SendTransaction() {
     " ",
   ];
   const values = [
-    "0",
     "1",
     "2",
     "3",
@@ -62,20 +61,23 @@ function SendTransaction() {
     "09",
     "0A",
     "0B",
+    "0C",
   ];
   var map = new Map();
+  var map_rev = new Map();
   for (var i = 0; i < keys.length; i++) {
     map.set(keys[i], values[i]);
+    map_rev.set(values[i], keys[i]);
   }
-  const [msg, setMsg] = useState();
+  const [msg, setMsg] = useState("");
 
   const web3 = new Web3(
     "https://eth-goerli.g.alchemy.com/v2/9rYRCT3uOuRu6TI-LMXNj1v57YWNZqBD"
   ); // Replace with your Infura project ID or your Ethereum node URL
   // Contract address
   const contractAddress = "0x59028155D42d57D39A0d793885128606a4f62Cb1"; // Replace with the actual contract address
-  var transactions = [];
-  var response;
+  const [transactions, setTransactions] = useState([]);
+
   async function getAllContractTransactions() {
     return new Promise((resolve, reject) => {
       const options = {
@@ -103,20 +105,22 @@ function SendTransaction() {
         }),
       };
 
+      let transactions_ = [];
       fetch(
-        "https://eth-goerli.g.alchemy.com/v2/9rYRCT3uOuRu6TI-LMXNj1v57YWNZqBD",
+        "https://eth-goerli.g.alchemy.com/v2/CUSxMgwsanWoAJtU0_4EitOeDNacScOf",
+        // "https://eth-goerli.g.alchemy.com/v2/9rYRCT3uOuRu6TI-LMXNj1v57YWNZqBD",
         options
       )
         .then((response) => response.json())
         .then((response) => {
           for (i = 0; i < response.result.transfers.length; i++) {
-            transactions.push(response.result.transfers[i].hash);
+            transactions_.push(response.result.transfers[i].hash);
           }
+          setTransactions(transactions_);
           resolve();
         })
         .catch((err) => {
           console.error(err);
-
           reject();
         });
     });
@@ -135,30 +139,94 @@ function SendTransaction() {
   //     });
 
   async function send() {
-    var str = "hello world";
-    console.log(str.length);
-    var t = "";
-    var index = "";
-    var j = 0;
-    for (j = 0; j < str.length; j++) {
-      for (i = 0; i < transactions.length; i++) {
-        t = t + i.toString();
-        console.log(str[j]);
-        if (
-          transactions[i].toLowerCase().includes(map.get(str[j].toUpperCase()))
-        ) {
-          index = index + transactions[i].indexOf(map.get(str[j]));
-          break;
-        }
-      }
-      break;
+    console.log(transactions);
+    // console.log(map);
+
+    var str = msg;
+
+    if (!str.length) {
+      alert("Provide a Message.");
+      return;
     }
 
-    console.log(t);
-    console.log(index);
-    console.log(transactions);
-    console.log(map);
+    var t = [];
+    var index = [];
+
+    str
+      .toUpperCase()
+      .split("")
+      .forEach((c) => {
+        for (let i = 0; i < transactions.length; i++) {
+          let x = transactions[i].toUpperCase().indexOf(map.get(c));
+          if (x != -1) {
+            if (x < 10) x = "0" + x;
+
+            t.push(i + 1);
+            index.push(x);
+
+            console.log(c, "FOUND");
+
+            break;
+          } else {
+            console.log(
+              c,
+              "not found",
+              "mapping",
+              map.get(c),
+              "transaction",
+              transactions[i]
+            );
+          }
+        }
+      });
+
+    console.log(
+      t
+        .join("")
+        .concat("." + index.join(""))
+        .concat("1")
+    );
   }
+
+  async function decrypt() {
+    // console.log(transactions);
+    // console.log(map_rev);
+
+    let cypher = "1111111111.160802481856060624161";
+    let tx_indexes = cypher.split(".")[0];
+    let map_indexes = cypher.split(".")[1];
+    map_indexes = map_indexes.substring(0, map_indexes.length - 1);
+
+    let plain_text = "";
+
+    for (let i = 0; i < tx_indexes.length; i++) {
+      let find;
+
+      if (map_indexes[i * 2] == "0") find = map_indexes[i * 2 + 1];
+      else find = map_indexes[i * 2] + map_indexes[i * 2 + 1];
+
+      plain_text = plain_text.concat(
+        map_rev.get(transactions[tx_indexes[i] - 1][find].toUpperCase())
+      );
+    }
+
+    console.log(plain_text);
+  }
+
+  function mergeRecurring(str) {
+    let result = "";
+
+    for (let i = 0; i < str.length; i++) {
+      // If the current character is different from the last character
+      // added to the result string, add it to the result string
+      if (result.length === 0 || str[i] !== result[result.length - 1]) {
+        result += str[i];
+      }
+    }
+
+    return result;
+  }
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -192,6 +260,13 @@ function SendTransaction() {
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Send
+            </button>
+            <br />
+            <button
+              onClick={() => decrypt()}
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Decrypt
             </button>
           </div>
         </div>
