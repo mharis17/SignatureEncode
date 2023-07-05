@@ -192,7 +192,8 @@ function SendTransaction() {
     // console.log(transactions);
     // console.log(map_rev);
 
-    let cypher = "1111111111.160802481856060624161";
+    let cypher =
+      "111111111311111125561232251.0332042005100865095214022651122119451736171328024530621";
     let tx_indexes = cypher.split(".")[0];
     let map_indexes = cypher.split(".")[1];
     map_indexes = map_indexes.substring(0, map_indexes.length - 1);
@@ -205,9 +206,13 @@ function SendTransaction() {
       if (map_indexes[i * 2] == "0") find = map_indexes[i * 2 + 1];
       else find = map_indexes[i * 2] + map_indexes[i * 2 + 1];
 
-      plain_text = plain_text.concat(
-        map_rev.get(transactions[tx_indexes[i] - 1][find].toUpperCase())
-      );
+      let map_key = transactions[tx_indexes[i] - 1][find].toUpperCase();
+      if (map_key == 0)
+        map_key = map_key.concat(
+          transactions[tx_indexes[i] - 1][Number(find) + 1].toUpperCase()
+        );
+
+      plain_text = plain_text.concat(map_rev.get(map_key));
     }
 
     console.log(plain_text);
