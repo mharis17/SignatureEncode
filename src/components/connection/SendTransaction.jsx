@@ -3,7 +3,7 @@ import CONTRACT_ABI from "../../abi/contract.abi.json";
 import React, { useEffect, useState } from "react";
 const CONTRACT_ADDRESS = "0x59028155D42d57D39A0d793885128606a4f62Cb1";
 const CBC_CONTRACT_ADDRESS = "0x024f6C12B5EE6F7452e344C55b5D6EA12116E34B";
-
+const Supply_contract = "0x024f6C12B5EE6F7452e344C55b5D6EA12116E34B";
 function SendTransaction() {
   const keys = [
     "A",
