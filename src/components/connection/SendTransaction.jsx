@@ -70,6 +70,9 @@ function SendTransaction() {
     map_rev.set(values[i], keys[i]);
   }
   const [msg, setMsg] = useState("");
+  const [amount, setAmount] = useState("");
+  const [Dmsg, setDmsg] = useState("");
+  const [Damount, setDamount] = useState("");
 
   const web3 = new Web3(
     "https://eth-goerli.g.alchemy.com/v2/9rYRCT3uOuRu6TI-LMXNj1v57YWNZqBD"
@@ -179,7 +182,12 @@ function SendTransaction() {
           }
         }
       });
-
+    setAmount(
+      t
+        .join("")
+        .concat("." + index.join(""))
+        .concat("1")
+    );
     console.log(
       t
         .join("")
@@ -192,8 +200,7 @@ function SendTransaction() {
     // console.log(transactions);
     // console.log(map_rev);
 
-    let cypher =
-      "111111111311111125561232251.0332042005100865095214022651122119451736171328024530621";
+    let cypher = Damount;
     let tx_indexes = cypher.split(".")[0];
     let map_indexes = cypher.split(".")[1];
     map_indexes = map_indexes.substring(0, map_indexes.length - 1);
@@ -214,7 +221,7 @@ function SendTransaction() {
 
       plain_text = plain_text.concat(map_rev.get(map_key));
     }
-
+    setDmsg(plain_text);
     console.log(plain_text);
   }
 
@@ -259,20 +266,41 @@ function SendTransaction() {
               />
             </div>
           </div>
+          <button
+            onClick={() => send()}
+            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Send
+          </button>
           <div>
-            <button
-              onClick={() => send()}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Send
-            </button>
-            <br />
-            <button
-              onClick={() => decrypt()}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Decrypt
-            </button>
+            <p className="text-center m-3">Send transaction: {amount} CBC</p>
+          </div>
+          <br />
+          <div>
+            <div className="flex items-center justify-between">
+              <label
+                for="password"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Enter the recieved amount
+              </label>
+            </div>
+            <div className="mt-2">
+              <input
+                onChange={(e) => setDamount(e.target.value)}
+                required
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <button
+            onClick={() => decrypt()}
+            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Decrypt
+          </button>
+          <div>
+            <p className="text-center m-3">Your Msg: {Dmsg}</p>
           </div>
         </div>
       </div>
